@@ -101,7 +101,7 @@ HAL_UART_Transmit(&huart2, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 ## Images
 
 ### UART Terminal Output:
-![UART Terminal Output](https://github.com/username/repository/blob/main/images/uart_terminal_output.png?raw=true)
+![UART Terminal Output](https://github.com/Abib/joystick-controller-stm32/blob/main/images/uart_terminal_output.png?raw=true)
 
 ---
 
