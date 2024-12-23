@@ -1,0 +1,43 @@
+# Ignorer les dossiers de build
+/Debug/
+/Release/
+
+# Ignorer les fichiers générés par l'IDE
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.lst
+*.log
+*.dep
+*.obj
+
+# Ignorer les fichiers temporaires du système
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers de configuration utilisateur
+*.launch
+*.settings/
+*.ide.*
+
+# Ignorer les fichiers spécifiques aux compilateurs
+*.suo
+*.user
+*.cbp
+*.cproject
+*.project
+
+# Ignorer les fichiers liés aux bibliothèques générées
+*.a
+*.lib
+
+# STM32CubeMX spécifique
+*.ioc.*
+/Middlewares/Third_Party/FreeRTOS/Documentation/
+/Drivers/CMSIS/Documentation/
