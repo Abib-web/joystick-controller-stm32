@@ -1,6 +1,6 @@
 # Joystick-Controlled Vehicle Project with STM32
 
-This project demonstrates the integration of a joystick with an STM32 microcontroller for controlling a vehicle. Using I2C communication, the joystick is used to manage directional movements and speed adjustments. The system also includes real-time feedback displayed on an LCD.
+This project demonstrates the integration of a joystick with an STM32 microcontroller for controlling a vehicle. Using I2C communication, the joystick is used to manage directional movements and speed adjustments. The system also includes real-time feedback displayed on a UART terminal.
 
 ---
 
@@ -12,8 +12,8 @@ This project demonstrates the integration of a joystick with an STM32 microcontr
 - Buttons on the joystick are used for additional functionalities like mode toggling.
 
 ### Real-Time Feedback:
-- An LCD displays the current state of the vehicle, including the speed and mode (manual or automatic).
-- The Real-Time Clock (RTC) provides time and date on the display.
+- Data from the joystick is displayed in real-time on a UART terminal.
+- The output includes joystick position, acceleration data, and button states.
 
 ### Acceleration Data:
 - The accelerometer embedded in the joystick provides pitch and roll data for advanced control.
@@ -29,14 +29,15 @@ This project demonstrates the integration of a joystick with an STM32 microcontr
 ### Hardware Requirements
 - STM32F446RE development board.
 - Wii Nunchuk joystick or any compatible I2C joystick.
-- LCD module for real-time data display.
+- UART-to-USB converter or similar for terminal communication.
 - Pull-up resistors (4.6kΩ) for the I2C lines.
 - 3.3V power supply for the joystick.
 
 ### Software Requirements
 - STM32CubeMX for project configuration.
 - STM32CubeIDE for coding and debugging.
-- HAL library for I2C and LCD management.
+- PuTTY or Tera Term for UART terminal output.
+- HAL library for I2C and UART management.
 
 ---
 
@@ -55,9 +56,9 @@ This project demonstrates the integration of a joystick with an STM32 microcontr
 **Initialization:**
 - Configure the I2C protocol in standard mode with a 7-bit address.
 
-### LCD Configuration
-- Use Lab #6 code as a base to interface the LCD.
-- Display data including joystick input and real-time clock information.
+### UART Configuration
+- Set up UART in STM32CubeMX for serial communication.
+- Use a baud rate of 9600 or higher for data output.
 
 ---
 
@@ -79,4 +80,31 @@ HAL_I2C_Master_Receive(&hi2c1, NUNCHUK_ADDRESS, data, 6, HAL_MAX_DELAY);
 // Parse joystick data
 int8_t joystick_x = data[0];
 int8_t joystick_y = data[1];
-``
+int accel_x = (data[2] << 2) | ((data[5] >> 2) & 0x03);
+int accel_y = (data[3] << 2) | ((data[5] >> 4) & 0x03);
+int accel_z = (data[4] << 2) | ((data[5] >> 6) & 0x03);
+
+// Transmit parsed data via UART
+char buffer[100];
+sprintf(buffer, "Joystick X: %d, Y: %d\nAccel X: %d, Y: %d, Z: %d\nButton C: %d, Button Z: %d\n",
+        joystick_x, joystick_y, accel_x, accel_y, accel_z, 
+        !(data[5] & 0x02), !(data[5] & 0x01));
+HAL_UART_Transmit(&huart2, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+```
+
+## Video Demonstration
+
+- [Joystick Manipulation and Vehicle Control](https://drive.google.com/file/d/1689lBxDMI8c7FaeYoWoYacifNVS20Pdw/view?usp=sharing)
+
+---
+
+## Images
+
+### UART Terminal Output:
+![UART Terminal Output](https://github.com/username/repository/blob/main/images/uart_terminal_output.png?raw=true)
+
+---
+
+## Conclusion
+
+This project showcases the effective use of a joystick for vehicle control, with real-time feedback displayed on a UART terminal. By leveraging I2C communication, advanced data parsing, and accelerometer integration, this implementation serves as a foundation for complex embedded systems.
